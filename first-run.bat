@@ -1,4 +1,1 @@
-﻿npm install
-bower install
-tsd reinstall
-grunt
+npm install & bower install & tsd reinstall --save & grunt
