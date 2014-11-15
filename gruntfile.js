@@ -3,6 +3,8 @@ module.exports = function(grunt) {
     // Load Grunt tasks declared in the package.json file.
     require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
  
+    grunt.option('showtsc', true);
+
     // Project configuration.
     grunt.initConfig({
  
@@ -11,12 +13,12 @@ module.exports = function(grunt) {
          * to the project name and appVersion number.
          */
         pkg: grunt.file.readJSON('package.json'),
-
+        
         typescript: {
             main: {
                 src: [
-                	'_references.ts',
-                	'typings/**/*.d.ts',
+                	//'_references.ts',
+                	//'typings/**/*.d.ts',
                 	'app/**/*.ts'
                 	],
                 dest: 'output/app.js',
@@ -25,7 +27,9 @@ module.exports = function(grunt) {
                     basePath: 'app',
                     sourceMap: true,
                     declaration: true,
-                    _showNearlyTscCommand: true
+                    _showNearlyTscCommand: true,
+                    
+                    references: ['typings/**/*.d.ts', '_references.ts']
                     //nolib: false,
                     //comments: false
                 }

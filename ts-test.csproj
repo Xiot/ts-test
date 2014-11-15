@@ -29,6 +29,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bower.json" />
+    <Content Include="first-run.bat" />
     <None Include="package.json" />
     <None Include="README.md" />
     <None Include="tsd.json" />
