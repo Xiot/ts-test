@@ -20,13 +20,23 @@
 //}
 
 angular.module('ts-test', ["ui.router"])
-    .controller('rootController', controllers.RootController);
+    .controller('rootController', controllers.RootController)
+    // @ngInject
+    //.controller('inlineController', function ($scope) {
+    //    $scope.inline = true;
+    //})
+
+;
 
 angular.module('ts-test')
+    .controller('otherController', OtherController)
+
+angular.module('ts-test')
+    
     .config(function($stateProvider) {
         $stateProvider.state('root', {
             url: '',
             controller: 'rootController',
-            templateUrl: 'app/controllers/root.html'
+            templateUrl: 'app/partials/root.html'
         })
     })

@@ -26,17 +26,45 @@ module.exports = function(grunt) {
                     target: 'es5', //or es5
                     basePath: 'app',
                     sourceMap: true,
-                    declaration: true,
-                    _showNearlyTscCommand: true,
-                    
+                    declaration: true,                  
                     references: ['typings/**/*.d.ts', '_references.ts']
                     //nolib: false,
                     //comments: false
                 }
             }
         },
+        ngAnnotate: {
+            main: {
+                options: {
+                    ngAnnotateOptions: {
+                        sourcemap: true
+                    }
+                },
+                files: {
+                    'output/app.js' : 'output/app.js'
+                }
+            }
+        },
+        uglify: {
+            options: {
+                mangle: true,
+                beautify: true,
+                sourceMap: true,
+                sourceMapIn: 'output/app.js.map',
+                compress: {
+                    //angular: true
+                }
+                //sourceMapIncludeSources: true
+            },
+            main: {
+                files: {
+                    'output/app.min.js': 'output/app.js'
+                }
+            }
+        }
     });
 
-grunt.registerTask('default', ['typescript']);
+    grunt.registerTask('default', ['typescript',/* 'ngAnnotate',*/ 'uglify']);
+    grunt.registerTask('annotate', ['ngAnnotate']);
 
 }

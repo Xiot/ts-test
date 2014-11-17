@@ -22,22 +22,32 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include="app\controllers\root.html" />
+    <Content Include="app\less\styles.css">
+      <DependentUpon>styles.less</DependentUpon>
+    </Content>
+    <Content Include="app\less\styles.min.css">
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
+    <Content Include="app\partials\another.html" />
+    <Content Include="app\partials\root.html" />
     <Content Include="gruntfile.js" />
+    <Content Include="gulpfile.js" />
     <Content Include="index.html" />
-    <Content Include="output\app.js" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\less\styles.less" />
+    <Content Include="app\less\styles.css.map">
+      <DependentUpon>styles.css</DependentUpon>
+    </Content>
     <None Include="bower.json" />
-    <Content Include="first-run.bat" />
     <None Include="package.json" />
     <None Include="README.md" />
-    <None Include="tsd.json" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="app\app.ts" />
     <TypeScriptCompile Include="app\controllers\rootController.ts" />
     <TypeScriptCompile Include="app\root\BaseController.ts" />
+    <TypeScriptCompile Include="playground\compiler.ts" />
     <TypeScriptCompile Include="typings\angular-ui\angular-ui-router.d.ts" />
     <TypeScriptCompile Include="typings\angularjs\angular.d.ts" />
     <TypeScriptCompile Include="typings\jquery\jquery.d.ts" />
@@ -83,8 +93,9 @@
   </ProjectExtensions>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
-    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
     <TypeScriptOutFile>output/app.vs.js</TypeScriptOutFile>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
