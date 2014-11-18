@@ -1,7 +1,7 @@
 ﻿var gulp = require('gulp');
+var gutil = require('gulp-util');
 
 var ts = require('gulp-typescript');
-var concatsm = require('gulp-concat-sourcemap');
 var concat = require('gulp-concat');
 var sourcemaps = require('gulp-sourcemaps');
 var ngAnnotate = require('gulp-ng-annotate');
@@ -12,12 +12,14 @@ var del = require('del');
 var livereload = require('gulp-livereload');
 var watch = require('gulp-watch');
 var less = require('gulp-less');
-var nghtmljs = require('gulp-ng-html2js');
-var htmljs = require('gulp-html2js');
+var templateCache = require('gulp-angular-templatecache');
 var header = require('gulp-header');
 var htmlmin = require('gulp-htmlmin');
 var fileSort = require('gulp-angular-filesort');
+var size = require('gulp-size');
+var rename = require('gulp-rename');
 
+var ignore = require('gulp-ignore');
 
 var tsProject = ts.createProject({
     sortOutput: true,
@@ -27,11 +29,6 @@ var tsProject = ts.createProject({
     noExternalResolve: true
 });
 
-var sourceMapsInOptions = {
-    loadMaps: true,
-    includeContent: false,
-    //    sourceRoot: '/app'
-};
 var sourceMapsOutOptions = {
     includeContent: false,
     //sourceRoot: '../'
@@ -47,8 +44,7 @@ gulp.task('clean', function () {
 gulp.task('compile:less', function () {
     gulp.src('app/less/*.less')
       .pipe(less())
-      .pipe(gulp.dest('output'))
-    //.pipe(livereload({ auto: false }))    
+      .pipe(gulp.dest('output')) 
 });
 
 gulp.task('watch', ['default'], function () {
@@ -60,39 +56,50 @@ gulp.task('watch', ['default'], function () {
     gulp.watch('app/partials/**/*.html', ['compile:partials']);
 
     gulp.watch('output/**').on('change', livereload.changed);
-    //gulp.watch('build/**').on('change', livereload.changed);
 });
 
-gulp.task('notify', function () {
-    livereload.changed();
-})
 
 gulp.task('compile:partials', function () {
     return gulp.src('app/partials/**/*.html')
+            .pipe(size({ title: 'before' }))
             .pipe(htmlmin({ removeComments: true, collapseWhitespace: true }))
-            .pipe(nghtmljs({ moduleName: 'ts-test.partials', declareModule: false, prefix: 'app/partials/' }))
-            //.pipe(htmljs({ outputModuleName: 'ts-test.partials'}))
-            .pipe(concat('ts-test.partials.js'))
-            .pipe(header("angular.module('ts-test.partials',[]);\n"))
+            .pipe(templateCache('ts-test.partials.js', {
+                module: 'ts-test.partials',
+                standalone: true,
+                
+                root: 'app/partials/'
+            }))
+            
             .pipe(uglify())
-            .pipe(gulp.dest('output/partials'));
+            .pipe(size({ title: 'after' }))
+        .pipe(size({ title: 'gzip', gzip:true }))
+            .pipe(gulp.dest('output'));
 });
 
 gulp.task('compile:src', function () {
 
     var tsResult = gulp.src(['typings/**/*.d.ts', '_references.ts', 'app/**/*.ts'])
-                    .pipe(sourcemaps.init(sourceMapsInOptions))
+                    .pipe(sourcemaps.init({ loadMaps: true }))
                     .pipe(ts(tsProject));
 
     var js = tsResult.js
+        
                 //.pipe(fileSort())
                 .pipe(concat('app.gulp.js'))
                 .pipe(ngAnnotate())
-                .pipe(uglify({ output: { beautify: true } }))
-                .pipe(sourcemaps.write('./', sourceMapsOutOptions)) // Now the sourcemaps are added to the .js file
+                .pipe(sourcemaps.write('./', sourceMapsOutOptions))
                 .pipe(gulp.dest('output/'))
-    //.pipe(livereload({ auto: false }));
+                .pipe(ignore.exclude('*.map'))
+                .pipe(size({ title: 'js  ' }))
 
+                .pipe(uglify({ output: { beautify: true } }))
+                .pipe(rename('app.gulp.min.js'))
+                .pipe(size({ title: 'min ' }))
+                .pipe(size({ gzip: true, title: 'gzip' }))
+                .pipe(sourcemaps.write('./', sourceMapsOutOptions))
+                .pipe(gulp.dest('output/'))
+                
+    
     var dts = tsResult.dts
                 .pipe(concat('app.gulp.d.ts'))
                 .pipe(gulp.dest('output/'));
