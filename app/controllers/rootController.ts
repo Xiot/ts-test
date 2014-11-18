@@ -1,18 +1,15 @@
 /// <reference path="../root/basecontroller.ts" />
-/// <reference path="../../node_modules/typescript-services/typescriptservices.d.ts" />
-/// <reference path="../../node_modules/typescript-services/typescriptservices.d.ts" />
 
 module controllers {
     export class RootController extends Root.BaseController {
 
-        //static $inject: string[] = ['$scope']
+        //static $inject: string[] = ['$scope', '$state']
 
-        // @ngInject
-		constructor($scope){
+        
+		constructor($scope, $state: ng.ui.IState){
 			super($scope);
-            $scope.message = "Drinking the big Gulp, automagically.";
-
-            var s = TypeScript.SimpleText.fromString("");
+			$scope.message = "Drinking the BIG Gulp, automagically!!";
+			$scope.other = $state.name; //"2nd line in the paragraph and beyond";
 		}
 	}
 }

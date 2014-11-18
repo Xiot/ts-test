@@ -1,1 +1,1 @@
-npm install & bower install & tsd reinstall --save & grunt
+npm install & bower install & tsd reinstall --save & gulp

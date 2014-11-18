@@ -11,6 +11,7 @@ module Root {
 }
 
 // @ngInject
-function OtherController($scope) {
-    $scope.again = 'd';
+function OtherController($scope, $state) {
+	$scope.again = 'd';
+	$scope.x = $state.name;
 }

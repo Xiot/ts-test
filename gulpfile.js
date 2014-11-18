@@ -88,7 +88,7 @@ gulp.task('compile:src', function () {
                 //.pipe(fileSort())
                 .pipe(concat('app.gulp.js'))
                 .pipe(ngAnnotate())
-                //.pipe(uglify({ output: { beautify: false } }))
+                .pipe(uglify({ output: { beautify: true } }))
                 .pipe(sourcemaps.write('./', sourceMapsOutOptions)) // Now the sourcemaps are added to the .js file
                 .pipe(gulp.dest('output/'))
     //.pipe(livereload({ auto: false }));
