@@ -19,6 +19,8 @@ var fileSort = require('gulp-angular-filesort');
 var size = require('gulp-size');
 var rename = require('gulp-rename');
 
+var chalk = require('chalk');
+
 var ignore = require('gulp-ignore');
 
 var tsProject = ts.createProject({
@@ -34,6 +36,12 @@ var sourceMapsOutOptions = {
     //sourceRoot: '../'
 };
 
+gulp.task('color', function() {
+    gutil.log(chalk.black('black') + chalk.red('red') + chalk.green('green') + chalk.yellow('yellow') + chalk.blue('blue') + chalk.magenta('magenta') + chalk.cyan('cyan') + chalk.white('white') + chalk.gray('gray'));
+    gutil.log(chalk.white(
+            chalk.bgBlack('black') + chalk.bgRed('red') + chalk.bgGreen('green') + chalk.bgYellow('yellow') + chalk.bgBlue('blue') + chalk.bgMagenta('magenta') + chalk.bgCyan('cyan') + chalk.bgWhite('white')
+        ));
+});
 
 gulp.task('default', ['clean', 'compile:src', 'compile:partials', 'compile:less']);
 
