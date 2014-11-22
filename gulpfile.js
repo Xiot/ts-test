@@ -92,7 +92,7 @@ gulp.task('compile:src', function () {
                 .pipe(ignore.exclude('*.map'))
                 .pipe(size({ title: 'js  ' }))
 
-                .pipe(uglify({ output: { beautify: true } }))
+                .pipe(uglify({ output: { beautify: false } }))
                 .pipe(rename('app.gulp.min.js'))
                 .pipe(size({ title: 'min ' }))
                 .pipe(size({ gzip: true, title: 'gzip' }))
