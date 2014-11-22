@@ -36,7 +36,8 @@ angular.module('ts-test')
     .config(function($stateProvider) {
         $stateProvider.state('root', {
             url: '',
-            controller: 'rootController',
+			controller: 'rootController',
+			controllerAs: 'vm',
             templateUrl: 'app/partials/root.html'
         })
     })
