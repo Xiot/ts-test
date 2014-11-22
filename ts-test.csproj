@@ -101,8 +101,8 @@
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>True</TypeScriptSourceMap>
-    <TypeScriptOutFile>output/app.vs.js</TypeScriptOutFile>
-    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptOutFile>output-vs/app.vs.js</TypeScriptOutFile>
+    <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
     <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
