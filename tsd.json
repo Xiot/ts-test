@@ -6,13 +6,19 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "angularjs/angular.d.ts": {
-      "commit": "a6b1e4ff841e617e3d449189f82562143d98400d"
+      "commit": "7c94fa739cdb7ef9c5fb794116e787cb13955d35"
     },
     "angular-ui/angular-ui-router.d.ts": {
-      "commit": "a6b1e4ff841e617e3d449189f82562143d98400d"
+      "commit": "7c94fa739cdb7ef9c5fb794116e787cb13955d35"
     },
     "jquery/jquery.d.ts": {
-      "commit": "a6b1e4ff841e617e3d449189f82562143d98400d"
+      "commit": "7c94fa739cdb7ef9c5fb794116e787cb13955d35"
+    },
+    "lodash/lodash.d.ts": {
+      "commit": "569bf2ba07d7d526ac4d7d67c29a0fc51df3a440"
+    },
+    "urijs/URI.d.ts": {
+      "commit": "569bf2ba07d7d526ac4d7d67c29a0fc51df3a440"
     }
   }
 }
