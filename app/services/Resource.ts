@@ -11,11 +11,80 @@ module Services {
     // TODO: create an options object to pass to the parers
     // and between the objects if needed
 
+    export interface IHttpResponse extends ng.IHttpPromiseCallbackArg<any> { }
+
+    export interface IResponseParser {
+        canParse(response: IHttpResponse): boolean;
+        parse(response: IHttpResponse, options: IResourceOptions): Resource;
+        populate(resource: Resource, response: IHttpResponse) : void;
+        //(response: ng.IHttpPromiseCallbackArg<any>): Resource;
+    }
+
     export interface IResourceParser {
-        (response: ng.IHttpPromiseCallbackArg<any>): Resource;
+        //(response: IHttpResponse, options: IResourceOptions): Resource;
+        create(response: IHttpResponse, options: IResourceOptions): Resource;
+        populate(resource: Resource, response: IHttpResponse): void;
+    }
+
+    export class ResourceParserFactory implements IResourceParser {
+        public parsers: IResponseParser[] = [];
+
+        public create(response: IHttpResponse): Resource {
+            var parser = this.getParserFor(response);
+            return parser.parse(response, null);
+        }
+
+        public populate(resource: Resource, response: IHttpResponse): void {
+            var parser = this.getParserFor(response);
+            parser.populate(resource, response);
+        }
+
+        private getParserFor(response: IHttpResponse): IResponseParser {
+            var first = _.find(this.parsers, x => {
+                return x.canParse(response);
+            });
+
+            if (!first)
+                throw new Error('Unable to parse.');
+
+            return first;
+        }
+}
+
+    export interface IResourceOptions {
+        parser: IResourceParser;
+        http: ng.IHttpService;
+        parent: Resource;
+        url: string;
+    }
+
+    export class RootResource {
+
+        private _options: IResourceOptions;
+        constructor(options: IResourceOptions) {
+            this._options = options;
+        }
+
+        public follow(path: string[]): BreadcrumbLink {
+            return null;
+        }
+        public get(): ng.IPromise<Resource> {
+
+            return this._options.http.get('/').then(res => {
+                var o = _.clone(this._options);
+                return this._options.parser.create(res, o);
+            });
+        }
     }
 
     export class Resource {
+
+        private _options: IResourceOptions;
+        
+        constructor(options: IResourceOptions) {
+            this._options = options;
+            this.href = this._options.url;
+        }
 
         public id: string;
         public href: string;
@@ -24,6 +93,18 @@ module Services {
 
         public follow(path: Array<string>): BreadcrumbLink {
             return null;
+        }
+
+        public activate(): ng.IPromise<any> {
+
+            return this._options.http.get(this.href).then(x => {
+                this.parse(x);
+                this.activated = true;
+            });
+        }
+
+        private parse(response: IHttpResponse): void {
+            this._options.parser.populate(this, response);
         }
     }
 
@@ -51,7 +132,7 @@ module Services {
         private _http: ng.IHttpService;
         private _parser: IResourceParser;
 
-        constructor($http, parent: Resource) {
+        constructor($http: ng.IHttpService, parent: Resource) {
             this._http = $http;
             this._parent = parent;
         }
@@ -66,7 +147,16 @@ module Services {
 
             var uri = URI.expand(this.href, params).toString();
             return this._http.get(uri).then(res => {
-                return this._parser(res);                
+
+                var resource = new Resource({
+                    http: this._http,
+                    parent: this._parent,
+                    parser: this._parser,
+                    url: uri
+                });
+
+                this._parser.populate(resource, res);
+                return resource;
             });
 
             return null;
