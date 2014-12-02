@@ -54,7 +54,7 @@ module Services {
     export interface IResourceOptions {
         parser: IResourceParser;
         http: ng.IHttpService;
-        parent: Resource;
+        parent?: Resource;
         url: string;
     }
 
@@ -79,7 +79,7 @@ module Services {
 
     export class Resource {
 
-        private _options: IResourceOptions;
+        public _options: IResourceOptions;
         
         constructor(options: IResourceOptions) {
             this._options = options;
@@ -90,16 +90,18 @@ module Services {
         public href: string;
         public links: { [rel: string]: ResourceLink };
         public activated: boolean;
+        public props : {[name: string]: any};
 
         public follow(path: Array<string>): BreadcrumbLink {
             return null;
         }
 
         public activate(): ng.IPromise<any> {
-
+            
             return this._options.http.get(this.href).then(x => {
                 this.parse(x);
                 this.activated = true;
+                return this;
             });
         }
 
@@ -135,6 +137,7 @@ module Services {
         constructor($http: ng.IHttpService, parent: Resource) {
             this._http = $http;
             this._parent = parent;
+            this.params = [];
         }
 
         public href: string;
@@ -142,6 +145,8 @@ module Services {
         public contentType: string;
         public method: string;
         public title: string;
+
+        public params: string[];
 
         public get(params: any): ng.IPromise<Resource> {
 

@@ -29,15 +29,34 @@ angular.module('ts-test', ["ui.router"])
 ;
 
 angular.module('ts-test')
-    .controller('otherController', OtherController)
+    .controller('otherController', OtherController);
 
 angular.module('ts-test')
-    
     .config(function($stateProvider) {
-        $stateProvider.state('root', {
+    $stateProvider.state('root', {
             url: '',
-			controller: 'rootController',
-			controllerAs: 'vm',
+            controller: 'rootController',
+            controllerAs: 'vm',
             templateUrl: 'app/partials/root.html'
         })
-    })
+        .state('explorer', {
+            url: '/explore',
+            controller: Controllers.ExplorerController,
+            controllerAs: 'vm',
+            templateUrl: 'app/partials/explorer.html',
+            resolve: {
+                root: function ($http: ng.IHttpService) {
+
+                    var parserFactory = new Services.ResourceParserFactory();
+                    parserFactory.parsers.push(new Services.Parsers.GitHubParser());
+
+                    var opt = {
+                        url: 'https://api.github.com',
+                        parser: parserFactory, //new Services.Parsers.GitHubParser(),
+                        http: $http
+                    };
+                    return new Services.Resource(opt).activate();
+                }
+            }
+});
+    });
