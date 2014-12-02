@@ -45,9 +45,9 @@ gulp.task('color', function() {
 
 gulp.task('default', ['clean', 'compile:src', 'compile:partials', 'compile:less']);
 
-gulp.task('clean', function () {
+gulp.task('clean', function() {
     del('output/*.*');
-})
+});
 
 gulp.task('compile:less', function () {
     gulp.src('app/less/*.less')
@@ -86,7 +86,7 @@ gulp.task('compile:partials', function () {
 
 gulp.task('compile:src', function () {
 
-    var tsResult = gulp.src(['typings/**/*.d.ts', '_references.ts', 'app/**/*.ts'])
+    var tsResult = gulp.src(['typings/**/*.d.ts', '_references.ts', 'app/**/*.ts', '!app/services/SynergizeClient.ts'])
                     .pipe(sourcemaps.init({ loadMaps: true }))
                     .pipe(ts(tsProject));
 

@@ -19,6 +19,7 @@
     "angular-ui-router": "~0.2.12",
     "ui-router": "~0.2.12",
     "lodash": "~2.4.1",
-    "uri.js": "~1.14.1"
+    "uri.js": "~1.14.1",
+    "bootstrap": "~3.3.1"
   }
 }

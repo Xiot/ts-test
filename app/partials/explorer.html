@@ -1,0 +1,18 @@
+﻿<pre>{{vm.active.href}}</pre>
+<h2>Properties</h2>
+<pre>{{vm.active.props | json}}</pre>
+<h2>Links</h2>
+<ul>
+    <li ng-repeat="link in vm.active.links track by $index">
+        <div>
+            <a ng-click="vm.activate(link)">{{link.rel}}</a>
+            {{link.href}}
+            <div class="form-group" ng-if="link.params.length > 0">
+                <div ng-repeat="p in link.params track by $index">
+                    <span class="input-group-addon">{{p}}</span>
+                    <!--<input ng-model="link.paramValues[p]"/>-->
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
