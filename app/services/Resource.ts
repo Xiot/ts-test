@@ -88,7 +88,10 @@ module Services {
 
         public id: string;
         public href: string;
-        public links: { [rel: string]: ResourceLink };
+
+		public links: { [rel: string]: ResourceLink };
+		public items: Resource[] = [];
+
         public activated: boolean;
         public props : {[name: string]: any};
 
@@ -134,9 +137,10 @@ module Services {
         private _http: ng.IHttpService;
         private _parser: IResourceParser;
 
-        constructor($http: ng.IHttpService, parent: Resource) {
-            this._http = $http;
-            this._parent = parent;
+        constructor(options : IResourceOptions) {
+            this._http = options.http;
+			this._parent = options.parent;
+	        this._parser = options.parser;
             this.params = [];
         }
 
@@ -163,8 +167,6 @@ module Services {
                 this._parser.populate(resource, res);
                 return resource;
             });
-
-            return null;
         }
         public post(object: any): ng.IPromise<Resource> {
             return null;
