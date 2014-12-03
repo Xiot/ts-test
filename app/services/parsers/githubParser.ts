@@ -40,7 +40,7 @@
 
 				_.forEach(data, (value, key) => {
 
-					if (this.endsWith(key, '_url')) {
+					if (key === 'url' || this.endsWith(key, '_url')) {
 
 						var link = new ResourceLink(resource._options);
 						link.rel = key;
@@ -63,8 +63,19 @@
 			resource.props = props;
 		}
 
-        private endsWith(left: string, right: string) {
-            return left.lastIndexOf(right) === (left.length - right.length);
+        private endsWith(left: string, right: string) : boolean {
+
+            if (!left || !right)
+                return false;
+
+            if (left.length < right.length)
+                return false;
+
+            var index = left.lastIndexOf(right);
+            if (index < 0)
+                return false;
+
+            return index === (left.length - right.length);
         }
     }
 } 

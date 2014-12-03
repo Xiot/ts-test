@@ -31,6 +31,10 @@ angular.module('ts-test', ["ui.router"])
 angular.module('ts-test')
     .controller('otherController', OtherController);
 
+angular.module('ts-test').config(function($httpProvider : ng.IHttpProvider) {
+    $httpProvider.defaults.headers.common['Authorization'] = 'Basic eGlvdDp4ZWEsMjEsODdy';
+});
+
 angular.module('ts-test')
     .config(function($stateProvider) {
     $stateProvider.state('root', {

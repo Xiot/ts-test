@@ -153,8 +153,9 @@ module Services {
         public params: string[];
 
         public get(params: any): ng.IPromise<Resource> {
+            
+            var uri = this.url(params);
 
-            var uri = URI.expand(this.href, params).toString();
             return this._http.get(uri).then(res => {
 
                 var resource = new Resource({
@@ -170,6 +171,23 @@ module Services {
         }
         public post(object: any): ng.IPromise<Resource> {
             return null;
+        }
+
+
+
+        public url(values: any): string {
+
+            if (!this.params || this.params.length === 0)
+                return this.href;
+
+            values = values || {};
+            _.forEach(this.params, p => {
+                if (values[p] === undefined)
+                    values[p] = null;
+            });
+
+            var uri = URI.expand(this.href, values).toString();
+            return uri;
         }
     }
 } 
